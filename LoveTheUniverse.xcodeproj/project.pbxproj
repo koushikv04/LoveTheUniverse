@@ -14,19 +14,12 @@
 			remoteGlobalIDString = 11A24F652D36A40F00027A30;
 			remoteInfo = LoveTheUniverse;
 		};
-		11A24F812D36A41000027A30 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 11A24F5E2D36A40F00027A30 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 11A24F652D36A40F00027A30;
-			remoteInfo = LoveTheUniverse;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1190DE262D36A5AE00475FC4 /* LoveTheUniverse.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = LoveTheUniverse.xctestplan; sourceTree = "<group>"; };
 		11A24F662D36A40F00027A30 /* LoveTheUniverse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoveTheUniverse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11A24F762D36A41000027A30 /* LoveTheUniverseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoveTheUniverseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		11A24F802D36A41000027A30 /* LoveTheUniverseUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LoveTheUniverseUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -38,11 +31,6 @@
 		11A24F792D36A41000027A30 /* LoveTheUniverseTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = LoveTheUniverseTests;
-			sourceTree = "<group>";
-		};
-		11A24F832D36A41000027A30 /* LoveTheUniverseUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = LoveTheUniverseUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,22 +50,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11A24F7D2D36A41000027A30 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		11A24F5D2D36A40F00027A30 = {
 			isa = PBXGroup;
 			children = (
+				1190DE262D36A5AE00475FC4 /* LoveTheUniverse.xctestplan */,
 				11A24F682D36A40F00027A30 /* LoveTheUniverse */,
 				11A24F792D36A41000027A30 /* LoveTheUniverseTests */,
-				11A24F832D36A41000027A30 /* LoveTheUniverseUITests */,
 				11A24F672D36A40F00027A30 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,7 +68,6 @@
 			children = (
 				11A24F662D36A40F00027A30 /* LoveTheUniverse.app */,
 				11A24F762D36A41000027A30 /* LoveTheUniverseTests.xctest */,
-				11A24F802D36A41000027A30 /* LoveTheUniverseUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,29 +120,6 @@
 			productReference = 11A24F762D36A41000027A30 /* LoveTheUniverseTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		11A24F7F2D36A41000027A30 /* LoveTheUniverseUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 11A24F902D36A41000027A30 /* Build configuration list for PBXNativeTarget "LoveTheUniverseUITests" */;
-			buildPhases = (
-				11A24F7C2D36A41000027A30 /* Sources */,
-				11A24F7D2D36A41000027A30 /* Frameworks */,
-				11A24F7E2D36A41000027A30 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				11A24F822D36A41000027A30 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				11A24F832D36A41000027A30 /* LoveTheUniverseUITests */,
-			);
-			name = LoveTheUniverseUITests;
-			packageProductDependencies = (
-			);
-			productName = LoveTheUniverseUITests;
-			productReference = 11A24F802D36A41000027A30 /* LoveTheUniverseUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -178,10 +135,7 @@
 					};
 					11A24F752D36A41000027A30 = {
 						CreatedOnToolsVersion = 16.1;
-						TestTargetID = 11A24F652D36A40F00027A30;
-					};
-					11A24F7F2D36A41000027A30 = {
-						CreatedOnToolsVersion = 16.1;
+						LastSwiftMigration = 1610;
 						TestTargetID = 11A24F652D36A40F00027A30;
 					};
 				};
@@ -202,7 +156,6 @@
 			targets = (
 				11A24F652D36A40F00027A30 /* LoveTheUniverse */,
 				11A24F752D36A41000027A30 /* LoveTheUniverseTests */,
-				11A24F7F2D36A41000027A30 /* LoveTheUniverseUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -216,13 +169,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		11A24F742D36A41000027A30 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		11A24F7E2D36A41000027A30 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -246,13 +192,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		11A24F7C2D36A41000027A30 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -260,11 +199,6 @@
 			isa = PBXTargetDependency;
 			target = 11A24F652D36A40F00027A30 /* LoveTheUniverse */;
 			targetProxy = 11A24F772D36A41000027A30 /* PBXContainerItemProxy */;
-		};
-		11A24F822D36A41000027A30 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 11A24F652D36A40F00027A30 /* LoveTheUniverse */;
-			targetProxy = 11A24F812D36A41000027A30 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -450,6 +384,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R4C4U48DX7;
@@ -459,6 +394,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kouv.LoveTheUniverseTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoveTheUniverse.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LoveTheUniverse";
@@ -469,6 +405,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = R4C4U48DX7;
@@ -481,40 +418,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LoveTheUniverse.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/LoveTheUniverse";
-			};
-			name = Release;
-		};
-		11A24F912D36A41000027A30 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4C4U48DX7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kouv.LoveTheUniverseUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = LoveTheUniverse;
-			};
-			name = Debug;
-		};
-		11A24F922D36A41000027A30 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = R4C4U48DX7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.kouv.LoveTheUniverseUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = LoveTheUniverse;
 			};
 			name = Release;
 		};
@@ -544,15 +447,6 @@
 			buildConfigurations = (
 				11A24F8E2D36A41000027A30 /* Debug */,
 				11A24F8F2D36A41000027A30 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		11A24F902D36A41000027A30 /* Build configuration list for PBXNativeTarget "LoveTheUniverseUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				11A24F912D36A41000027A30 /* Debug */,
-				11A24F922D36A41000027A30 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

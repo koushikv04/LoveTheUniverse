@@ -1,0 +1,29 @@
+{
+  "configurations" : [
+    {
+      "id" : "14546F35-3FDB-4FF6-8533-7F89E18FEE76",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:LoveTheUniverse.xcodeproj",
+      "identifier" : "11A24F652D36A40F00027A30",
+      "name" : "LoveTheUniverse"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:LoveTheUniverse.xcodeproj",
+        "identifier" : "11A24F752D36A41000027A30",
+        "name" : "LoveTheUniverseTests"
+      }
+    }
+  ],
+  "version" : 1
+}
