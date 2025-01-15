@@ -9,31 +9,6 @@ import XCTest
 import Combine
 import LoveTheUniverse
 
-final class LocalFeedLoader {
-    typealias SaveResult = Swift.Result<Void,Swift.Error>
-    
-    enum Error:Swift.Error {
-        case invalidData
-        case retrievalError
-    }
-    
-    func save(_ planets:[Planet],completion:@escaping(SaveResult)->Void) {
-        if let planetsData = try? JSONEncoder().encode(planets) {
-            UserDefaults.standard.set(planetsData, forKey: "planets")
-            completion(.success(()))
-        } else {
-            completion(.failure(Error.invalidData))
-        }
-    }
-    
-    func load() -> AnyPublisher<[Planet],Error> {
-        if let planetsData = UserDefaults.standard.value(forKey: "planets") as? Data,let planets = try? JSONDecoder().decode([Planet].self, from: planetsData) {
-            return Just(planets).setFailureType(to: Error.self).eraseToAnyPublisher()
-        } else {
-            return Fail(error: Error.retrievalError).eraseToAnyPublisher()
-        }
-    }
-}
 
 final class CacheFeedUseCaseTests:XCTestCase {
     
@@ -42,17 +17,7 @@ final class CacheFeedUseCaseTests:XCTestCase {
         let planet1 = Planet(name: Name(common: "planet1", official: "planet1"))
         let savedPlanets = [planet1]
         let sut = makeSUT()
-        let exp = expectation(description: "wait for save cache")
-        sut.save(savedPlanets) { result in
-            switch result {
-            case .success:
-                break
-            default:
-                XCTFail("should have succeeded but got \(result) instead")
-            }
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: 1.0)
+        sut.save(savedPlanets)
         
         let planetsData = defaults.value(forKey: "planets") as? Data
         XCTAssertNotNil(planetsData)
