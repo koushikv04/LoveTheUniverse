@@ -9,53 +9,35 @@ import Combine
 
 final class PlanetViewModel:ObservableObject {
     private var cancellables = Set<AnyCancellable>()
+    private let remoteFeedLoader:FeedLoader
+    private let localFeedLoader:FeedLoader & PlanetsCache
     @Published var planets:[Planet] = []
    
+    init(remoteFeedLoader: FeedLoader,localFeedLoader:FeedLoader & PlanetsCache) {
+        self.remoteFeedLoader = remoteFeedLoader
+        self.localFeedLoader = localFeedLoader
+    }
     
-    public func fetchPlanets(from url:URL) {
-        get(url: url)
+    public func fetchPlanets() {
+        remoteFeedLoader.load()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] completion in
+            .sink { [weak self]result in
                 guard let self = self else {return}
-                switch completion {
-                case .finished:
-                    break
-                case .failure:
-                    self.loadCache { planets in
-                        if let planets = planets {
-                            self.planets = planets
-                        }
+                switch result {
+                case .finished:break
+                case .failure(_):
+                  _ =  localFeedLoader.load().sink { _ in
+                        
+                    } receiveValue: { planets in
+                        self.planets = planets
                     }
                 }
-            } receiveValue: { [weak self] planets in
+            } receiveValue: {[weak self] planets in
                 guard let self = self else {return}
-                saveCache(planets: planets)
+                self.localFeedLoader.save(planets)
                 self.planets = planets
-            }
-            .store(in: &cancellables)
-        
+            }.store(in: &cancellables)
 
-    }
-    
-    
-    private func saveCache(planets:[Planet]) {
-        UserDefaults.setValue(planets, forKey: "planets")
-    }
-    
-    private func loadCache(completion: @escaping ([Planet]?) -> Void) {
-        if let planets = UserDefaults.standard.value(forKey: "planets") as? [Planet] {
-            completion(planets)
-        } else {
-            completion(nil)
-        }
-    }
-    
-    private func get(url:URL) -> AnyPublisher<[Planet],Error> {
-        
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type : [Planet].self,decoder:JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     
