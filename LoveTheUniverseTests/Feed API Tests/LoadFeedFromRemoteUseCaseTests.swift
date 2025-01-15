@@ -1,5 +1,5 @@
 //
-//  RemoteLoaderWithCacheTests.swift
+//  LoadFeedFromRemoteUseCaseTests.swift
 //  LoveTheUniverse
 //
 //  Created by Kouv on 14/01/2025.
@@ -9,74 +9,6 @@ import Combine
 import LoveTheUniverse
 import XCTest
 
-//protocol FeedCache {
-//    func save(_ planets:[Planet])
-//    func load(completion: @escaping(([Planet]) -> Void))
-//}
-//
-protocol RemoteLoader {
-    func load() -> AnyPublisher<[Planet],Error>
-}
-
-//final class RemoteLoaderWithCache {
-//    private let url:URL
-//    private let remote:RemoteLoader
-//    private let cache:FeedCache
-//    
-//    init(url: URL = URL(string: "any-url.com")!,remoteLoader:RemoteLoader,cache:FeedCache) {
-//        self.url = url
-//    }
-//    
-//    func fetchPlanets() {
-//        remote.load().receive(on: DispatchQueue.main).sink { result in
-//            switch result {
-//            case .finished
-//            case .failure(let error)
-//            }
-//        } receiveValue: { planets in
-//            
-//        }
-//
-//    }
-//   
-//}
-
-final class PlanetsViewModel {
-    private let remoteLoader:RemoteLoader
-    private var cancellables = Set<AnyCancellable>()
-    
-    var planets:[Planet] = []
-    
-    init(remoteLoader: RemoteLoader) {
-        self.remoteLoader = remoteLoader
-    }
-    
-    func fetchPlanets(completion: @escaping((Subscribers.Completion<Error>) -> Void)) {
-        remoteLoader.load().sink { result in
-            completion(result)
-        } receiveValue: { planets in
-            self.planets = planets
-        }.store(in: &cancellables)
-
-    }
-}
-final class RemoteFeedLoader:RemoteLoader {
-    private let session:URLSession
-    private let url:URL
-    
-    init(url:URL,session: URLSession) {
-        self.url = url
-        self.session = session
-    }
-    
-    func load() -> AnyPublisher<[Planet],Error> {
-        return session.dataTaskPublisher(for: url)
-            .map(\.data)
-            .decode(type: [Planet].self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
-    }
-}
-
 final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
     
     override func tearDown() {
@@ -85,13 +17,17 @@ final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
     
     func test_load_requestsURLInSession() {
         let url = anyURL()
+        var cancellables = Set<AnyCancellable>()
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLProtoColStub.self]
         let session = URLSession(configuration: config)
         let sut = RemoteFeedLoader(url: url, session: session)
-        let viewModel = PlanetsViewModel(remoteLoader: sut)
         
-        viewModel.fetchPlanets(){_ in }
+        sut.load().sink { _ in
+        } receiveValue: { _ in
+            
+        }.store(in: &cancellables)
+
         
         let exp = expectation(description: "wait to return the requested url")
         
@@ -105,6 +41,7 @@ final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
     }
     
     func test_load_failsOnInvalidCases() {
+        XCTAssertNotNil(resultErrorFor(data: nil, error: anyNSError(), response: nil),"Expected the remote loader to fail")
         XCTAssertNotNil(resultErrorFor(data: nil, error: nil, response: nil),"Expected the remote loader to fail")
         XCTAssertNotNil(resultErrorFor(data: anyData(), error: nil, response: nil),"Expected the remote loader to fail")
         XCTAssertNotNil(resultErrorFor(data: anyData(), error: anyNSError(), response: nil),"Expected the remote loader to fail")
@@ -119,88 +56,38 @@ final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
     func test_load_succeedsOnHTTPResponseWithNilData() {
         let emptyPlanets:[Planet] = []
         let data = try! JSONEncoder().encode(emptyPlanets)
-        let (_,viewModel) = makeSUT()
+        let sut = makeSUT()
         
-        executeFinishWith(viewModel,data: data)
+        let receivedPlanets = executeFinishWith(sut,data: data)
         
-        XCTAssertEqual(viewModel.planets, emptyPlanets,"Expected the sut to return the planets")
+        XCTAssertEqual(receivedPlanets, emptyPlanets,"Expected the sut to return the planets")
     }
     
     func test_load_succeedsOnHTTPResponseWithData() {
-        let (_,viewModel) = makeSUT()
+        let sut = makeSUT()
         let planet1 = Planet(name: Name(common: "planet1", official: "planet1"))
         let planet2 = Planet(name: Name(common: "planet2", official: "planet2"))
         let planets = [planet1,planet2]
         let data = try! JSONEncoder().encode(planets)
         
-        executeFinishWith(viewModel,data: data)
+        let receivedPlanets = executeFinishWith(sut,data: data)
         
-        XCTAssertEqual(viewModel.planets, planets,"Expected the sut to return the planets")
+        XCTAssertEqual(receivedPlanets, planets,"Expected the sut to return the planets")
     }
     
     
-//    func test_load_deliversErrorOnSessionError() {
-//        let url = URL(string: "any-url.com")!
-//        let config = URLSessionConfiguration.ephemeral
-//        config.protocolClasses = [URLProtoColStub.self]
-//        let session = URLSession(configuration: config)
-//        let error = NSError(domain: "any error", code:  0)
-//        URLProtoColStub.stub(data: nil, error: error, response: nil)
-//        let sut = RemoteFeedLoader(url: url, session: session)
-//        let viewModel = PlanetsViewModel(remoteLoader: sut)
-//        
-//        let exp = expectation(description: "wait to return the requested url")
-//
-//        viewModel.fetchPlanets(){result in
-//            switch result {
-//            case .failure:
-//                break
-//            default:
-//                XCTFail("should have failed but got response \(result) instead")
-//            }
-//            exp.fulfill()
-//        }
-//        
-//        wait(for: [exp], timeout: 1.0)
-//    }
-    
-//    func test_load_deliversFinishedO() {
-//        let url = URL(string: "any-url.com")!
-//        let config = URLSessionConfiguration.ephemeral
-//        config.protocolClasses = [URLProtoColStub.self]
-//        let session = URLSession(configuration: config)
-//        let error = NSError(domain: "any error", code:  0)
-//        URLProtoColStub.stub(data: nil, error: error, response: nil)
-//        let sut = RemoteFeedLoader(url: url, session: session)
-//        let viewModel = PlanetsViewModel(remoteLoader: sut)
-//        
-//        let exp = expectation(description: "wait to return the requested url")
-//
-//        viewModel.fetchPlanets(){result in
-//            switch result {
-//            case .failure:
-//                break
-//            default:
-//                XCTFail("should have failed but got response \(result) instead")
-//            }
-//            exp.fulfill()
-//        }
-//        
-//        wait(for: [exp], timeout: 1.0)
-//    }
+
     
     //MARK: - Helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut:RemoteFeedLoader,viewModel:PlanetsViewModel) {
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> RemoteFeedLoader {
         let url = anyURL()
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLProtoColStub.self]
         let session = URLSession(configuration: config)
         let sut = RemoteFeedLoader(url: url, session: session)
-        let viewModel = PlanetsViewModel(remoteLoader: sut)
         trackMemoryLeak(sut,file: file,line: line)
-        trackMemoryLeak(viewModel,file: file,line: line)
-        return (sut,viewModel)
+        return (sut)
     }
     
     private func anyURL() -> URL {
@@ -229,15 +116,17 @@ final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
         }
     }
     
-    private func executeFinishWith(_ viewModel:PlanetsViewModel,data:Data) {
+    private func executeFinishWith(_ sut:RemoteFeedLoader,data:Data) -> [Planet]? {
         let url = anyURL()
+        var receivedPlanets:[Planet]?
         
         let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil)
+        var cancellables = Set<AnyCancellable>()
 
         URLProtoColStub.stub(data: data, error: nil, response: response)
         
         let exp = expectation(description: "wait to return the requested url")
-        viewModel.fetchPlanets(){result in
+        sut.load().sink { result in
             switch result {
             case .finished:
                 break
@@ -245,28 +134,42 @@ final class LoadFeedFromRemoteUseCaseTests:XCTestCase {
                 XCTFail("should have finished but got response \(result) instead")
             }
             exp.fulfill()
-        }
+        } receiveValue: { planets in
+            receivedPlanets = planets
+        }.store(in: &cancellables)
+
         wait(for: [exp], timeout: 1.0)
+        
+        return receivedPlanets
     }
     
     private func resultErrorFor(data:Data?,error:Error?,response:URLResponse?,file: StaticString = #file, line: UInt = #line) -> Error? {
-        let (_,viewModel) = makeSUT(file:file,line: line)
-        URLProtoColStub.stub(data: data, error: error, response: response)
-        
-        var receivedError:Error?
-        let exp = expectation(description: "wait to return the requested url")
-        viewModel.fetchPlanets(){result in
-            switch result {
-            case let .failure(error):
-                receivedError = error
-                break
-            default:
-                XCTFail("should have failed but got response \(result) instead")
-            }
-            exp.fulfill()
+
+        let result = resultFor(data: data, error: error, response: response)
+        switch result {
+        case let .failure(error):
+            return error
+        default:
+            XCTFail("should have failed but got response \(result) instead")
+            return nil
         }
+    }
+    
+    private func resultFor(data:Data?,error:Error?,response:URLResponse?,file: StaticString = #file, line: UInt = #line) -> Subscribers.Completion<Error> {
+        let sut = makeSUT(file:file,line: line)
+        URLProtoColStub.stub(data: data, error: error, response: response)
+        var cancellables = Set<AnyCancellable>()
+        var receivedResult:Subscribers.Completion<Error>!
+        let exp = expectation(description: "wait to return the requested url")
+        sut.load().sink { result in
+            receivedResult = result
+            exp.fulfill()
+        } receiveValue: { _ in
+            
+        }.store(in: &cancellables)
+
         wait(for: [exp], timeout: 1.0)
-        return receivedError
+        return receivedResult
     }
     
     private class URLProtoColStub:URLProtocol {
